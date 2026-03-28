@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>小说网站</title>
+<link rel="stylesheet" href="xswz.css">
+</head>
+<body>
+  <!-- 移动端背景图容器 -->
+  <div class="mobile-bg"></div>
+  <!-- PC端背景图容器 -->
+  <div class="pc-bg"></div>
+  
+  
+    <!-- 科技线条开始位置 -->
+  <div class="tech-lines" style="position: fixed; inset: 0; z-index: 0; pointer-events: auto;">
+    <canvas id="techLines"></canvas>
+    <script>
+        const canvas = document.getElementById('techLines');
+        const ctx = canvas.getContext('2d');
+
+        // 设置canvas尺寸为窗口大小
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // 粒子类
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5 + 0.5; // 粒子大小
+                this.speedX = Math.random() * 0.5 - 0.25; // X方向速度
+                this.speedY = Math.random() * 0.5 - 0.25; // Y方向速度
+            }
+
+            // 更新粒子位置
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // 边界检测
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            // 绘制粒子
+            draw() {
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // 创建粒子数组
+        let particles = [];
+        function init() {
+            particles = [];
+            // 根据屏幕大小创建不同数量的粒子
+            const particleCount = Math.floor((canvas.width * canvas.height) / 6000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // 连接粒子的线条
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // 当粒子距离小于一定值时绘制连接线
+                    if (distance < 150) {
+                        const opacity = 1 - distance / 200;
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.5})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 鼠标交互
+        let mouse = {
+            x: null,
+            y: null,
+            radius: 200 // 鼠标影响范围
+        };
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        canvas.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // 鼠标与粒子的交互
+        function mouseInteraction() {
+            if (mouse.x && mouse.y) {
+                for (let i = 0; i < particles.length; i++) {
+                    const dx = mouse.x - particles[i].x;
+                    const dy = mouse.y - particles[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // 粒子远离鼠标
+                    if (distance < mouse.radius) {
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        const angle = Math.atan2(dy, dx);
+                        particles[i].x -= Math.cos(angle) * force * 0.5;
+                        particles[i].y -= Math.sin(angle) * force * 0.5;
+                    }
+                }
+            }
+        }
+
+        // 动画循环
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+
+            
+            // 更新和绘制粒子
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            
+            // 连接粒子
+            connectParticles();
+            
+            // 鼠标交互
+            mouseInteraction();
+            
+            requestAnimationFrame(animate);
+        }
+
+            // 绘制网格背景
+            drawGrid();
+
+        // 绘制网格背景
+        function drawGrid() {
+            const gridSize = 30; // 网格大小
+            ctx.strokeStyle = 'rgba(0, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+
+            // 绘制水平线
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // 绘制垂直线
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+        }
+
+        // 初始化并启动动画
+        init();
+        animate();
+
+    </script>
+</div>
+
+
+            <h3 style="text-align: center;">
+            <div class="image-container">
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9202291f309b79e97b2b.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9202291f309b79e97b2a.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9252291f309b79e97b47.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9252291f309b79e97b46.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c926a291f309b79e97b4a.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c926b291f309b79e97b4b.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9234291f309b79e97b2f.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9232291f309b79e97b2c.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9280291f309b79e97b50.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c927e291f309b79e97b4d.gif"/>
+              </div></div>
+              <div>
+               <div class="image-container">
+               <h3 style="text-align: center;">
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9910291f309b79e97bce.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9910291f309b79e97bcd.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9924291f309b79e97bd4.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9924291f309b79e97bd5.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9924291f309b79e97bd3.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9924291f309b79e97bd6.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9924291f309b79e97bd2.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9910291f309b79e97bd0.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9910291f309b79e97bcf.png"/>
+                <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c9910291f309b79e97bd1.png"/>
+                </div>
+
+<div class="forum-container">
+<!-- 快捷键容器（四列同行+自动换行+适配屏幕宽度） -->
+<div class="title-shortcuts-container" style="
+  width: 100%; /* 容器宽度铺满屏幕 */
+  max-width: 100vw; /* 最大宽度不超过屏幕宽度 */
+  padding: -10px 0px -10px 0px; /* 容器内边距，与页面边缘留间隙 */
+  box-sizing: border-box; /* 确保padding不增加容器总宽度 */
+  margin: 10px 0; /* 上下间距 */
+">
+  <div class="title-shortcuts" style="
+    display: flex;
+    flex-wrap: wrap; /* 超出自动换行 */
+    width: 100%; /* 子容器铺满父容器 */
+    margin: 0 0px; /* 抵消子元素的左右margin，避免边缘溢出 */
+  ">
+    <!-- 快捷方式链接（每个占1/4宽度，严格四列） -->
+    <a href="#novel-1" style="
+      flex: 0 0 calc(25% - 10px); /* 25%宽度 - 10px间距 = 实际宽度，确保四列 */
+      margin: 0 5px 10px; /* 左右间距5px，上下间距10px */
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box; /* 确保padding不影响宽度计算 */
+    ">小说论坛</a>
+
+    <a href="#novel-2" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">小说网站</a>
+
+    <a href="#novel-3" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">在线轻小说</a>
+
+    <a href="#novel-4" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">小说网盘资源</a>
+    
+    <a href="#novel-5" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">在线番剧</a>
+    
+        <a href="#novel-6" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">在线漫画</a>
+    
+        <a href="#novel-7" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">次元壁纸</a>
+    
+        <a href="#novel-8" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">磁力字幕</a>
+    
+        <a href="#novel-9" style="
+      flex: 0 0 calc(25% - 10px);
+      margin: 0 5px 10px;
+      height: calc(100% - 50px);
+      padding: 2px 0; /* 上下内边距，增加点击区域 */
+      text-align: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: #e6d3d8;
+      text-decoration: none;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      box-sizing: border-box;
+    ">……</a>
+
+  </div>
+</div>
+</div>
+
+                
+                <!-- 容器及下方内容的共同父级 -->
+                <div class="container-group">
+                <!-- 两个容器（横向排列） -->
+                <div class="containers-row">
+                <div class="container-item">
+                <h5 class="container-title" id="novel-1"><a style="color: #999999;">小说论坛</a></h5>
+<div class="forum-container">
+                <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.jkju.cc/">镜客居</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://2407--1412.0714.165.soushufabu.top:2228/o/?">搜书吧</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.iiishu.com/">爱阅书吧</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://hjcy.xyz/index.php?">幻境次元</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://rxsq.cc/">瑞雪社区</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.baoshuyou.com/">宝书友</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://404ba.com/forum.php">404吧</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.ttxiaoshuo.top/forum.php?mod=guide&view=new&mobile=2">小说论坛</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://sxsy.org/">尚香书苑</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://soushu.org/">搜书小组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.53dushu.com/">读书会</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.horou.com/">河洛网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.1000qm.vip/">阡陌居</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://mail.zazww.com/forum.php?forumlist=1">早安社区</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.ttxiaoshuo.top/">WET3</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.newbornya.com/">雅书阁</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://bbs.yamibo.com/">百合会</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://laowang.vip">老王论坛</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://g.sis001.us/">第一会所</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.cool18.com/bbs4/">禁忌书屋</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://sehuatang.org/forum.php?mod=forumdisplay&fid=139&mobile=2">色花堂</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://chunman4.com/forum.php?mod=guide&view=hot">春满四合院</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.jkforum.net/p/forum-544-1.html">捷克论坛</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.linzijun.app/fiction/list">林子菌</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://sexinsex.net/bbs/index.php?gid=399">E-Book</a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://bbs.wcccc.cc/"><s>月曦论坛</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.iiisg.com/forum.php"><s>时光论坛</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.abooky.com/plugin.php?"><s>阅次元</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.xinqi8888.com/"><s>星期八</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.95yuedu.com/forum.php"><s>我爱迅雷</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.moke08.com/forum.php"><s>小云社区</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://miaowu69.com"><s>喵屋论坛</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.lm52.com/"><s>蓝猫论坛</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.baoshu8.com/"><s>抱书吧</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.soushushu.com/forum.php?mobile=2"><s>搜书书</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://legado.cn/"><s>阅读论坛</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.z3p.com/index.php"><s>小说社区</s></a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-2"><a style="color: #999999;">小说网站</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.jpxs123.com/">精品小说网①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.jpxs123.cc/">精品小说网②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://trxs.me/">同人社</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://trxs.cc/">同人小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.qbtr.cc/">全本同人小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.tongrenquan.org/">同人圈</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.txt520.com/">txt520</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.bixiange.top/">笔仙阁</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.powanjuan.cc/">破万卷</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://ffxs8.com/">饭饭小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.sjks88.com/">言情小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.diyibanzhu444444.com/">第一版主</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.alicesw.org/">爱丽丝书屋</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.8xsk.com/">八叉书库</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://czbooks.net/">小说狂人</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://hlib.cc/">H图书馆</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.book18.org/#new">涩气小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.xncwxw.net/">新暖才文学网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://alhs.xyz/">艾利浩斯图书馆</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zhaoze.pro/">黑沼泽俱乐部</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://houhuayuan.vip/">蔷薇后花园</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.uaa.com/novel">uaa小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.hotupub.net/">河图文化</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.22ks.com/">爱看书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.akshu88.com/">爱看书吧</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.boshisw.com/">博仕书屋</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.zxcs.info/">知轩藏书①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zxcstxt.com/">知轩藏书②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zxcsol.com/">知轩藏书③</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://dl.askk.cc/ms">知轩藏书（备份）①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zxcs.4everland.app/#/">知轩藏书（备份）②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.aixdzs.com/">爱下电子书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.4ksw.com/">四库书屋</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.biquge.co/xuanhuanxiaoshuo/">笔趣阁①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.222biquge.com/">笔趣阁②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.biquzw789.net/">笔趣阁③</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.dqcn.cn/">锦绣文学</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.ltxsw.net/">龙腾小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.feisxs.com/">飞速中文网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.shu008.com/">书林文学①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.shu111.com/list/1.html">书林文学②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.xitongliu.cn/">系统流小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.ops8.com">ops8小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://sodu.tw/">sodu小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.wqmmxs.com/">呦呦看书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.236318.com/">笔书阁</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.ezksw.org/">EZ看书网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://xmsoushu.com/#/">熊猫搜书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.yqxz.org/">言情小筑</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.wujixiaoshuo.org/">无极小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.81book.com/">八一中文网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.wxxsw.cc/">无限小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.qishu77.com/">奇书网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://noveless.com/">书荒部落</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.ting13.cc/">听书网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.huanting.cc/">幻听网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.itingshu.net/">爱听书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://reader.960960.xyz/#/manager/empty">开源电子书</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.51shucheng.net/">无忧书城</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.youasj.com/">左岩书居</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.12z.cn/index.html">免费小说网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.zei8.vip/">贼吧网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.huanxiangji.com">幻想姬</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.s-book.org/">云搜小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.zjsw.org/">爪机书屋</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.41song.com/">风云小说阅读网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.aiquwx.com/">爱去小说网</a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://mnz.koroneko.co/"><s>Nhimmeo Mui</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://m.60ks.cc/"><s>60ks小说网</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.jianpan.la/"><s>键盘小说</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.boyunso.com/"><s>拨云搜索</s></a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-3"><a style="color: #999999;">在线轻小说</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.wenku8.net/index.php">轻小说文库</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.lightnovel.us/">轻之国度</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.huanmengacg.com/">幻梦轻小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://books.fishhawk.top/">轻小说机翻机器人</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.bilinovel.com/">哔哩轻小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.mobinovels.com/">魔笔小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.yamibo.com/">百合会（小说）</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://masiro.me/admin">真白萌</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.esjzone.cc/">ESJ Zone</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.23qb.com/">铅笔小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://epubln.blogspot.com">EPUB轻小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.lightnovel.love/home">轻书架</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://cijoc.com/">CIJOC轻小说</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.myrics.com/">米国度</a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://epub.love/wp/"><s>图书馆的无限回廊</s></a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://voidlord.com/"><s>虚空文学旅团</s></a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-4"><a style="color: #999999;">小说网盘资源</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://lovelive233.github.io/">🌸小说查找(资源失效不补)🌸</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://wwnw.lanzoum.com/b041zh0xg">J56Hn8bghj0I</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://t.me/sosdbot">搜书神器 v2</a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-5"><a style="color: #999999;">在线番剧</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.cycity.pro/">次元城</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://dm.xifanacg.com/">稀饭动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.233dm.com/">233动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.fsdm02.com/">番薯动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.akianime.com/">AkiAnime</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://qkan8.com/">去看吧</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.5dm.link/">5弹幕</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.skrcc.cc/">樱之空动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.2ksp.vip/">2k动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.2rk.cc/">二矿动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://acgfta.com/">饭团动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://anime1.me/">Anime1</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.agedm.io/#/">AGE动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://girigirilove.top/">girigirilove动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://xuandm.com/">XDM动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.ssrfun.com/">SSRFun动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.sxsggs.com/">天堂动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://yhdmoe.com/">🌸动漫①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://fcdmp.xyz/">风车动漫①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.bimiacg10.net/">哔咪动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.dora-video.cn/">哆啦新番社</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.920dm.cc/">第一动漫网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://msousou.vip/">漫搜搜</a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-6"><a style="color: #999999;">在线漫画</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://komiic.com/">Komiic漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://kzz.moe/">Kmoe漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://mheee.com/">漫自由</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zerobyw.github.io/">zero搬运网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://antbyw.github.io/">ant搬运网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.itsacg.top/">it's漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.mangabz.com/">Mangabz</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://mycomic.com/cn">MYCOMIC</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.xmanhua.com/">X漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.yymanhua.com/">YY漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.mangacopy.com/h5/index">拷贝漫画</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.acloudmerge.com/">集云数据</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://manhua.fffdm.com/">风之动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.2animx.com/">二次元动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://keiyoushi.github.io/extensions/">漫画插件库①</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://github.com/keiyoushi/extensions">漫画插件库②</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.manben.com/">漫本(国漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://rumanhua.com/">如漫画(国漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.manhua3.com/">漫画网(国漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.guomanwang.com/">国漫网(国漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.2nunu.com/index.php">奴奴漫画(国漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.99web.cc/">漫小肆(韩漫)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://aicomic.org/">AICOMIC</a><a style="color: #ff0000; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.manhuadb.com/"><s>漫画DB</s></a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-7"><a style="color: #999999;">次元壁纸</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.pixiv.net/">Pixiv</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.pixivic.com/">直连P站</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://wallhaven.cc/">wallhaven</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://pic.netbian.com/">彼岸图网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://haowallpaper.com/">哲风壁纸</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://qianye88.com/">千叶网</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.someacg.top/">SomeACG</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://gal.voiux.com/">Voiux图库</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://wallhere.com/">wallhere</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://yande.re/">yande.re</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://1st.moe/sion-bot/random-lolis/">随机loli</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.zerochan.net/">zerochan</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://dimtown.com/">次元小镇</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.soutushenqi.com/home">搜图神器</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.marxiaoma.net/">Mar小马(付)</a></h6>
+                 </div>
+                 </div>
+                 <div class="container-item">
+                 <h5 class="container-title" id="novel-8"><a style="color: #999999;">磁力字幕</a></h5>
+<div class="forum-container">
+                 <h6><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://share.dmhy.org/">动漫花园</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://animes.garden/">动漫花园(镜像)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.tsdm39.com/">天使动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.skyey2.com/">天雪☆论坛</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://www.ptshare.org/">PTShare</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://nyaa.si/">nyaa</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://sukebei.nyaa.si/">nyaa(里)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://acg.rip/?">ACG磁力</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.anix.moe/">Anix磁力</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.kisssub.org/#continue">爱恋动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://m.comicat.org/">漫猫动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://share.xfsub.org/">旋风动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.acgfengche.com/">风车动漫</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://bangumi.moe/">萌番组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://dmly.me/">动漫领域</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://share.acgnx.se/">末日动漫资源库</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.acg23.com/">ACG资源</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="http://cltt.me/">磁力天堂</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://ggbases.dlgal.com/">GGBases</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.tokyotosho.info/">东京东照馆</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://mikanani.me/">蜜柑计划</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://bgm.liumingye.cn/">番组放送</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://bbs.acgrip.com/">Anime字幕论坛</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://secure.assrt.net/xml/list/sub/">射手网(伪)</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://zimuku.org/">字幕库</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://subhd.tv/">SubHD字幕</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://vcb-s.com/">VCB字幕组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://subs.kamigami.org/">诸神字幕组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://dmguo.org/">动漫国字幕组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://www.airota.net/bbs/">千夏字幕组</a><a style="color: #ff9900; margin-bottom: 10px; margin-right: 20px;display:inline-block" target="_blank" href="https://web5.mukaku.com/">不太灵磁力</a></h6>
+                 </div>
+                 </div>
+                 </div> <!-- 闭合.containers-row -->
+                 <!-- 容器正下方的内容 -->
+                  <div class="below-containers">
+                  <div class="image-container">
+                  <h3 style="text-align: center;">
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc4.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98fa291f309b79e97bc9.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc5.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc3.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc6.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98fa291f309b79e97bca.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc7.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98fa291f309b79e97bcc.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98fa291f309b79e97bcb.gif"/>
+                  <img class="mobile-special-img-1"src="https://pic1.imgdb.cn/item/692c98c5291f309b79e97bc2.gif"/>
+                  <h3>
+                 </div></div>
+            <h3 style="text-align: center;">
+            <div class="image-container">
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9200291f309b79e97b28.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9200291f309b79e97b29.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9234291f309b79e97b2e.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9232291f309b79e97b2d.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9268291f309b79e97b48.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9269291f309b79e97b49.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9250291f309b79e97b44.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9250291f309b79e97b45.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c927e291f309b79e97b4e.gif"/>
+            <img class="mobile-special-img-2"src="https://pic1.imgdb.cn/item/692c9280291f309b79e97b4f.gif"/>
+
+
+
+</div></div>
+         <br />
+         <br />
+         </div> <!-- 闭合.container-group -->
+         </div> <!-- 闭合.content-wrapper -->
+           </div><br /><br />
+           <div><a style="color: #999999;">
+         <!-- 修复后的音乐播放器代码 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<div class="aplayer" 
+     data-id="9099783472" 
+     data-server="netease" 
+     data-type="playlist" 
+     data-fixed="true" 
+     data-autoplay="false"
+     data-volume="0.1">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@1.2.0/dist/Meting.min.js"></script>
+</div>
+
+<!-- 回到顶部箭头按钮 -->
+<div id="backToTop">
+    <span>◥</span>
+</div>
+<script>
+    const backToTopBtn = document.getElementById('backToTop');
+    
+    // 取消设备宽度判断，统一使用低阈值（适配手机桌面模式竖屏）
+    window.addEventListener('scroll', () => {
+        // 无论设备类型，滚动超过200px即显示（竖屏内容短，阈值降低）
+        if (window.pageYOffset > 200) {
+            backToTopBtn.style.opacity = '1';
+            backToTopBtn.style.visibility = 'visible';
+        } else {
+            backToTopBtn.style.opacity = '0';
+            backToTopBtn.style.visibility = 'hidden';
+        }
+    });
+    
+    // 点击事件保持平滑滚动
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // 初始加载时强制检查一次滚动位置（解决模式切换后不刷新的问题）
+    setTimeout(() => {
+        if (window.pageYOffset > 200) {
+            backToTopBtn.style.opacity = '1';
+            backToTopBtn.style.visibility = 'visible';
+        }
+    }, 500);
+
+
+           
+(function antiDevTools() {
+  
+  document.addEventListener('keydown', e => {
+    if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73,67].includes(e.keyCode)) || (e.ctrlKey && e.keyCode === 85)) {
+      e.preventDefault();e.stopPropagation();lockBlank();
+    }
+  }, true);
+
+  
+  document.addEventListener('contextmenu', e => {
+    if (!e.target.closest('#searchInput')) {
+      e.preventDefault();e.stopPropagation();
+    }
+  }, true);
+
+  
+  function checkDev() {
+    
+    const devOpen = window.outerWidth - window.innerWidth > 150 || window.outerHeight - window.innerHeight > 150;
+    if (devOpen) lockBlank();
+  }
+
+  
+  function lockBlank() {
+    
+    document.body.innerHTML = '';
+    document.head.innerHTML = '';
+    
+    window.location.href = 'about:blank';
+    history.replaceState(null, null, 'about:blank');
+    history.pushState(null, null, 'about:blank');
+    
+    window.addEventListener('popstate', () => history.replaceState(null, null, 'about:blank'), true);
+    window.addEventListener('hashchange', () => window.location.href = 'about:blank', true);
+    
+    window.addEventListener('beforeunload', e => {
+      e.preventDefault();
+      window.location.href = 'about:blank';
+    }, true);
+  }
+
+  
+  setInterval(() => {
+    try {debugger;} catch (e) {lockBlank();}
+  }, 50);
+
+  
+  window.addEventListener('resize', checkDev, true);
+  window.addEventListener('load', checkDev, true);
+  window.addEventListener('DOMContentLoaded', checkDev, true);
+})();
+</script>
+<!-- 👆 回到顶部按钮代码结束 👆 -->
+       </body>
+   </html>

@@ -1,0 +1,672 @@
+  /* 基础样式重置 */
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox隐藏滚动条 */
+    -ms-overflow-style: none; /* IE/Edge隐藏滚动条 */
+  }
+  /* Chrome/Safari等webkit内核浏览器隐藏滚动条 */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  
+  
+  
+  
+  /* 移动端背景图容器 - 仅在小屏幕显示 */
+  .mobile-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image: url('https://pic1.imgdb.cn/item/699583594e07536d0172a060.png'); 
+    /* https://pic1.imgdb.cn/item/692cc7f4291f309b79e97e1c.jpg 辉夜 */
+    /* https://pic1.imgdb.cn/item/682cd0fb58cb8da5c8ffc703.jpg 粉色小姐姐 */
+    /* https://pic1.imgdb.cn/item/692cc7f4291f309b79e97e1d.jpg 绫波丽 */
+    /* https://pic1.imgdb.cn/item/692cc7f5291f309b79e97e22.jpg 绫波丽 */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100vw;
+    display: block;
+  }
+  
+  /* PC端背景图容器 - 仅在中等及以上屏幕显示 */
+  .pc-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image: url('https://pic1.imgdb.cn/item/692ecb937e390957debbdd9a.webp');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    display: none;
+  }
+    
+  /* 响应式切换 - 中等屏幕及以上显示PC背景，位置得放上面啊，不然图片切换不了 */
+  @media (min-width: 768px) {
+    .mobile-bg {
+      display: none;
+    }
+    .pc-bg {
+      display: block;
+    }
+  }
+  
+  
+    /* 图片内容容器 */
+          .image-container {
+    overflow: hidden; /* 超出容器的内容隐藏 */
+    padding-left: 0px !important; /* 图片距离容器内部的距离，左侧内边距，数值越大距离越远 */
+    width: 100% !important; /* 保留原有百分比宽度 */
+    height: auto !important; /* 固定容器高度 */
+    max-width: 100%;
+    min-height: auto !important; /* 强制保持高度 */
+    max-height: 100%; /* 最大高度限制为视口的50%，适配不同屏幕 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 内容超出时显示垂直滚动条，避免溢出 */
+    box-sizing: border-box; /* 确保padding不额外增加高度 */
+    scrollbar-width: none; /* 针对Firefox浏览器 */
+    -ms-overflow-style: none; /* 针对IE/Edge浏览器 */
+    -webkit-overflow-scrolling: touch; /* 启用移动端平滑滚动 */
+    pointer-events: auto;
+    cursor: grab; /* 视觉提示可滑动 */
+  }
+  
+         .image-container:active {
+    cursor: grabbing; /* 滑动中视觉反馈，增强感知 */
+  }
+  
+        .image-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge等浏览器隐藏滚动条 */
+  }
+  
+  
+  
+/* 手机端（屏幕<768px）单独调整目标图片 */
+  @media (max-width: 767px) {
+    /* 仅对class为mobile-special-img-1的图片生效 */
+    .mobile-special-img-1 {
+      width: 10% !important;  /* 手机端宽度占比 */
+      max-width: auto;
+      height: auto !important;  /* 高度自动缩放 */
+      margin: 0px -2px !important; /* 左右间隔 */
+      padding: 5px -2px;
+      
+    }
+    /* 仅对class为mobile-special-img-2的图片生效（修复：移至手机端媒体查询内） */
+    .mobile-special-img-2 {
+      width: 10% !important;  /* 手机端宽度占比 */
+      max-width: auto;
+      height: auto !important;  /* 高度自动缩放 */
+      margin: -5px -2px !important; /* 左右间隔 */
+
+    }
+    
+    /* 文字样式 */
+    h3 {
+      font-size: 13px !important; /* 手机端三级标题大小 */
+      margin: 0 0 5px 0px !important; /* 上下间距 */
+    }
+    
+    h4 {
+      font-size: 13px !important; /* 手机端六级标题大小 */
+      margin: 0px 10px 0px 0 !important;
+      letter-spacing: 0.5px !important; /* 字间距 */
+      font-weight: 400; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+    }
+    
+    h5 {
+      font-size: 15px !important; /* 手机端五级标题大小 */
+      margin: 12px 10px !important; /* 上下间距+左右缩进 */
+      margin-bottom: -10px !important; /* 下间距 */
+    }
+    h6 {
+      font-size: 13px !important; /* 手机端六级标题大小 */
+      margin: 8px 10px !important;
+      letter-spacing: 0.5px !important; /* 字间距 */
+      font-weight: 400; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+
+    }
+    
+    
+.containers-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .container-item {
+    width: 100%; /* 容器宽度为90%，可自行调整 */
+    max-width: 450px !important;
+    margin: 5px !important;
+  }
+  
+  
+       .image-container {
+       overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 内容超出时显示垂直滚动条，避免溢出 */
+    box-sizing: border-box; /* 确保padding不额外增加高度 */
+    scrollbar-width: none; /* 针对Firefox浏览器 */
+    -ms-overflow-style: none; /* 针对IE/Edge浏览器 */
+    -webkit-overflow-scrolling: touch; /* 启用移动端平滑滚动 */
+    pointer-events: auto;
+    cursor: grab; /* 视觉提示可滑动 */
+  }
+  }
+  
+  
+  
+      /* 平板/小屏PC：768px~1023px → 2个/行 */
+  @media (min-width: 768px) and (max-width: 1459px) {
+    .mobile-special-img-1 {
+      width: 9% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: 0px 0px 0px 0px !important; /* 左右间隔 */
+      
+    }
+    .mobile-special-img-2 {
+      width: 9% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: 0px 0px 0px 0px !important; /* 左右间隔 */
+      padding: 0px 0px;
+    }
+    
+    /* 文字样式 */
+    h3 {
+      font-size: 24px !important; /* 电脑端三级标题更大 */
+      margin: 10px 0 !important;
+    }
+    
+      h4 {
+      font-size: 16px !important; /* 电脑端六级标题更大 */
+      margin: 0px 10px -200px 0 !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+      font-weight: 700; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+      }
+      
+    h5 {
+      font-size: 16px !important; /* 电脑端五级标题更大 */
+      margin: 15px 20px !important; /* 更大缩进 */
+      margin-bottom: -10px !important; /* 下间距 */
+    }
+    h6 {
+      font-size: 22px !important; /* 电脑端六级标题更大 */
+      margin: 10px 20px !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+      font-weight: 400; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+    }
+    
+    
+    /* 平板/小屏PC：容器固定宽度设置 - 核心修改 */
+.containers-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .container-item {
+    width: 100%; /* 容器宽度为90%，可自行调整 */
+    max-width: 450px !important; /* 每个容器占50%宽度，减去间隙 */
+    margin: 5px !important;
+    }
+
+    
+    /* 限制容器内容不超过容器宽度 */
+  .forum-container {
+    overflow: hidden; /* 超出容器的内容隐藏 */
+    padding-left: 10px !important; /* 左侧内边距，数值越大距离越远 */
+    width: 100% !important; /* 保留原有百分比宽度 */
+    height: 180px !important; /* 固定容器高度 */
+    max-width: 100%;
+    min-height: 180px !important; /* 强制保持高度 */
+    max-height: 100%; /* 最大高度限制为视口的50%，适配不同屏幕 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 内容超出时显示垂直滚动条，避免溢出 */
+    box-sizing: border-box; /* 确保padding不额外增加高度 */
+    scrollbar-width: none; /* 针对Firefox浏览器 */
+    -ms-overflow-style: none; /* 针对IE/Edge浏览器 */
+    -webkit-overflow-scrolling: touch; /* 启用移动端平滑滚动 */
+    pointer-events: auto;
+    cursor: grab; /* 视觉提示可滑动 */
+  }
+  
+    .forum-container:active {
+  cursor: grabbing; /* 滑动中视觉反馈，增强感知 */
+}
+
+
+  /* 调整网格之间的上下左右距离，避免内容溢出 */
+  .forum-container h6 {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 自动适配列数，避免溢出 */
+    column-gap: 10px !important; /* 列间距（左右间距），数值越大间距越宽 */
+    row-gap: 0px !important; /* 行间距（上下间距），默认0，调大增加行距 */
+    padding: 0px 0; /* 网格内边距，避免内容贴边 */
+    
+  }
+  
+  /* 单个链接不换行，超出部分省略（避免撑开容器） */
+  .forum-container h6 a {
+    white-space: nowrap; /* 不换行 */
+    overflow: hidden; /* 超出隐藏 */
+    text-overflow: ellipsis; /* 超出显示省略号 */
+    display: inline-block;
+    max-width: 100%; /* 不超过容器宽度 */
+    letter-spacing: 0.8px !important; /* 文字间距，默认0.5px，调大则间距变宽 */
+    word-spacing: 0px; /* 单词间距（中文可忽略） */
+    margin-left: -10px !important; /* 链接自身额外左间距（可选） */
+    pointer-events: auto; /* 保留点击功能 */
+    touch-action: manipulation; /* 让浏览器优先处理滑动，再响应点击 */
+  }
+  
+    .forum-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge等浏览器隐藏滚动条 */
+  }
+ }
+ 
+ 
+ 
+ 
+ /* 中屏PC：1024px~1199px → 3个/行 */
+@media (min-width: 1460px) and (max-width: 1799px) {
+    .mobile-special-img-1 {
+      width: 9.5% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: -3px 0px !important; /* 上下左右间隔 */
+      
+    }
+    .mobile-special-img-2 {
+      width: 9.5% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: -3px 0px !important; /* 上下左右间隔 */
+      padding: 0px 0px;
+    }
+    
+    /* 文字样式 */
+    h3 {
+      font-size: 24px !important; /* 电脑端三级标题更大 */
+      margin: 10px 0 !important;
+    }
+    
+      h4 {
+      font-size: 16px !important; /* 电脑端六级标题更大 */
+      margin: 0px 10px -200px 0 !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+         font-weight: 700; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+      }
+      
+    h5 {
+      font-size: 16px !important; /* 电脑端五级标题更大 */
+      margin: 15px 20px !important; /* 更大缩进 */
+      margin-bottom: -10px !important; /* 下间距 */
+    }
+    h6 {
+      font-size: 22px !important; /* 电脑端六级标题更大 */
+      margin: 10px 20px !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+      font-weight: 400; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+    }
+    
+    
+    /* 中屏PC：容器固定宽度设置 - 核心修改 */
+.containers-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .container-item {
+    width: 100%; /* 容器宽度为90%，可自行调整 */
+    max-width: 450px !important; /* 每个容器约占33.33%宽度，减去间隙 */
+    margin: 5px !important;
+  }
+      
+    /* 限制容器内容不超过容器宽度 */
+  .forum-container {
+    overflow: hidden; /* 超出容器的内容隐藏 */
+    padding-left: 10px !important; /* 左侧内边距，数值越大距离越远 */
+    width: 100% !important; /* 保留原有百分比宽度 */
+    height: 180px !important; /* 固定容器高度 */
+    max-width: 100%;
+    min-height: 180px !important; /* 强制保持高度 */
+    max-height: 100%; /* 最大高度限制为视口的50%，适配不同屏幕 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 内容超出时显示垂直滚动条，避免溢出 */
+    box-sizing: border-box; /* 确保padding不额外增加高度 */
+    scrollbar-width: none; /* 针对Firefox浏览器 */
+    -ms-overflow-style: none; /* 针对IE/Edge浏览器 */
+    -webkit-overflow-scrolling: touch; /* 启用移动端平滑滚动 */
+    pointer-events: auto;
+    cursor: grab; /* 视觉提示可滑动 */
+  }
+  
+    .forum-container:active {
+  cursor: grabbing; /* 滑动中视觉反馈，增强感知 */
+}
+
+  /* 调整网格之间的上下左右距离，避免内容溢出 */
+  .forum-container h6 {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 自动适配列数，避免溢出 */
+    column-gap: 10px !important; /* 列间距（左右间距），数值越大间距越宽 */
+    row-gap: 0px !important; /* 行间距（上下间距），默认0，调大增加行距 */
+    padding: 0px 0; /* 网格内边距，避免内容贴边 */
+    
+  }
+  
+  /* 单个链接不换行，超出部分省略（避免撑开容器） */
+  .forum-container h6 a {
+    white-space: nowrap; /* 不换行 */
+    overflow: hidden; /* 超出隐藏 */
+    text-overflow: ellipsis; /* 超出显示省略号 */
+    display: inline-block;
+    max-width: 100%; /* 不超过容器宽度 */
+    letter-spacing: 0.8px !important; /* 文字间距，默认0.5px，调大则间距变宽 */
+    word-spacing: 0px; /* 单词间距（中文可忽略） */
+    margin-left: -10px !important; /* 链接自身额外左间距（可选） */
+    pointer-events: auto; /* 保留点击功能 */
+    touch-action: manipulation; /* 让浏览器优先处理滑动，再响应点击 */
+  }
+  
+    .forum-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge等浏览器隐藏滚动条 */
+  }
+}
+ 
+ 
+ 
+ 
+     /* 大屏PC：≥1200px → 4个/行 */
+    @media (min-width: 1800px) {
+    .mobile-special-img-1 {
+      width: 9.5% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: -3px 0px !important; /* 左右间隔 */
+      
+    }
+    .mobile-special-img-2 {
+      width: 9.5% !important;  /* 电脑端宽度占比（比手机端大） */
+      max-width: auto;
+      height: auto !important;
+      margin: -3px 0px !important; /* 左右间隔 */
+      padding: 0px 0px;
+    }
+    
+    /* 文字样式 */
+    h3 {
+      font-size: 24px !important; /* 电脑端三级标题更大 */
+      margin: 10px 0 !important;
+    }
+    
+      h4 {
+      font-size: 16px !important; /* 电脑端六级标题更大 */
+      margin: 0px 10px -200px 0 !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+         font-weight: 700; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+      }
+      
+    h5 {
+      font-size: 16px !important; /* 电脑端五级标题更大 */
+      margin: 15px 20px !important; /* 更大缩进 */
+      margin-bottom: -10px !important; /* 下间距 */
+    }
+    h6 {
+      font-size: 22px !important; /* 电脑端六级标题更大 */
+      margin: 10px 20px !important;
+      letter-spacing: 1px !important; /* 更大字间距 */
+      font-weight: 400; /* 字体变细（相对当前字体的细体） */
+  /* 或使用具体数值：font-weight: 300;（数值越小越细，400为正常） */
+    }
+    
+    
+    /* 大屏PC：容器固定宽度设置 - 核心修改 */
+    .containers-row {
+display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .container-item {
+    width: 100%; /* 容器宽度为90%，可自行调整 */
+    max-width: 450px !important; /* 每个容器占25%宽度，减去间隙 */
+    margin: 5px !important;
+  }
+  
+      
+    /* 限制容器内容不超过容器宽度 */
+  .forum-container {
+    overflow: hidden; /* 超出容器的内容隐藏 */
+    padding-left: 10px !important; /* 左侧内边距，数值越大距离越远 */
+    width: 100% !important; /* 保留原有百分比宽度 */
+    height: 180px !important; /* 固定容器高度 */
+    max-width: 100%;
+    min-height: 180px !important; /* 强制保持高度 */
+    max-height: 100%; /* 最大高度限制为视口的50%，适配不同屏幕 */
+    overflow-x: hidden; /* 禁止横向滚动 */
+    overflow-y: auto; /* 内容超出时显示垂直滚动条，避免溢出 */
+    box-sizing: border-box; /* 确保padding不额外增加高度 */
+    scrollbar-width: none; /* 针对Firefox浏览器 */
+    -ms-overflow-style: none; /* 针对IE/Edge浏览器 */
+    -webkit-overflow-scrolling: touch; /* 启用移动端平滑滚动 */
+    pointer-events: auto;
+    cursor: grab; /* 视觉提示可滑动 */
+  }
+  
+    .forum-container:active {
+  cursor: grabbing; /* 滑动中视觉反馈，增强感知 */
+}
+
+  /* 调整网格之间的上下左右距离，避免内容溢出 */
+  .forum-container h6 {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* 自动适配列数，避免溢出 */
+    column-gap: 10px !important; /* 列间距（左右间距），数值越大间距越宽 */
+    row-gap: 0px !important; /* 行间距（上下间距），默认0，调大增加行距 */
+    padding: 0px 0; /* 网格内边距，避免内容贴边 */
+    
+  }
+  
+  /* 单个链接不换行，超出部分省略（避免撑开容器） */
+  .forum-container h6 a {
+    white-space: nowrap; /* 不换行 */
+    overflow: hidden; /* 超出隐藏 */
+    text-overflow: ellipsis; /* 超出显示省略号 */
+    display: inline-block;
+    max-width: 100%; /* 不超过容器宽度 */
+    letter-spacing: 0.8px !important; /* 文字间距，默认0.5px，调大则间距变宽 */
+    word-spacing: 0px; /* 单词间距（中文可忽略） */
+    margin-left: -10px !important; /* 链接自身额外左间距（可选） */
+    pointer-events: auto; /* 保留点击功能 */
+    touch-action: manipulation; /* 让浏览器优先处理滑动，再响应点击 */
+  }
+  
+    .forum-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge等浏览器隐藏滚动条 */
+  }
+}
+
+ 
+ 
+ 
+ 
+ 
+
+/* 标题内容容器样式，模拟半透磨砂、圆角等 */
+    .forum-container {
+  background: rgba(255, 255, 255, 0); /* 半透背景 */
+  backdrop-filter: blur(1.5px); /* 磨砂模糊效果 */
+  -webkit-backdrop-filter: blur(2px); /* 统一模糊半径，保持兼容 */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* 边框亮度 */
+  /* 关键：单独隐藏左上边框 */
+  border-top-width: 0; /* 上边框宽度设为0（消失） */
+  border-left-width: 0; /* 左边框宽度设为0（消失） */
+  border-radius: 12px; /* 圆角 */
+  padding: 4px 0px 0px 0px; /* 左侧内边距增加到20px（上右下左） */
+  margin: 20px auto; /* 居中 */
+  width: 96%;
+  max-width: 1000px;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 1); /* 边框阴影 */
+  color: #e6d3d8; /* 容器内默认文字颜色为白色 */
+  cursor: default; /* 鼠标在容器内显示默认样式（非手型） */
+  transition: background 0.2s; /* 平滑过渡动画 */
+}
+
+/* 图片内容容器样式，模拟半透磨砂、圆角等 */
+    .image-container {
+  background: rgba(255, 255, 255, 0); /* 半透背景 */
+  backdrop-filter: blur(1.5px); /* 磨砂模糊效果 */
+  -webkit-backdrop-filter: blur(2px); /* 统一模糊半径，保持兼容 */
+  border: 1px solid rgba(255, 255, 255, 0.4); /* 边框亮度 */
+  /* 关键：单独隐藏左上边框 */
+  border-top-width: 0; /* 上边框宽度设为0（消失） */
+  border-left-width: 0; /* 左边框宽度设为0（消失） */
+  border-radius: 12px; /* 圆角 */
+  padding: 5px 0px 0px 0px; /* 左侧内边距增加到20px（上右下左） */
+  margin: 10px auto; /* 居中 */
+  width: 100%;
+  max-width: auto;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 1); /* 边框阴影 */
+  color: #e6d3d8; /* 容器内默认文字颜色为白色 */
+  cursor: default; /* 鼠标在容器内显示默认样式（非手型） */
+  transition: background 0.2s; /* 平滑过渡动画 */
+}
+
+
+/* 在容器或全局样式中统一字体 */
+.forum-container, .forum-container h6 a {
+  font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif; /* 优先中文字体，后备英文字体 */
+  font-size: 13px; /* 统一字号（可根据需求调整） */
+  letter-spacing: 0px; /* 中英文通用间距，可微调 */
+}
+
+/* 核心：文字容器设置网格布局，每行固定4项 */
+.forum-container h6, .novel-container h6 {
+  display: grid; /* 启用网格布局 */
+  grid-template-columns: repeat(3, minmax(6em, 1fr)); /* 平均分配为4列，每行4项 */
+  justify-content: flex-start; /* 关键：让网格从左侧开始排列，不自动分配右侧空白 */
+  width: 96%; /* 强制网格容器占满外层容器宽度 */
+  align-items: center; /* 垂直居中对齐 */
+  row-gap: 0px; /* 仅增大每行文字之间的垂直间距 */
+  column-gap: 35px; /* 保留原水平间距（可选，可按需调整） */
+  padding: 0 7px; /* ★标题下面容器内网格文字之间的距离，太靠左侧容器改这个，最多7，再多右边空白了★ */
+  margin: 0; /* 清除默认边距 */
+  list-style: none; /* 若有列表项，清除默认样式 */
+}
+
+/* 单个文字项样式（统一每个项的布局） */
+.forum-container h6 a, .novel-container h6 a {
+  color: #e6d3d8 !important; /* 继承容器文字颜色 */
+  text-decoration: none !important;
+  font-weight: inherit;
+  padding-right: 0px; /* 数值越大，文字离右侧容器越远 */
+  text-align: left; /* 文字左对齐，排列整齐 */
+  margin: 0; /* 清除额外外边距，避免干扰网格位置 */
+  width: 100%; /* 占满所在列的宽度 */
+  white-space: nowrap; /* 文字不换行 */
+  overflow: hidden; /* 超出隐藏 */
+  text-overflow: ellipsis; /* 超出显示省略号 */
+  max-width: 11em; /* 核心修改：限制宽度（约8个汉字宽度） */
+}
+
+/* 核心：鼠标移动到容器内部时，背景变暗 */
+.forum-container:hover, .novel-container:hover {
+  background: rgba(0, 0, 0, 0.4); /* 悬停时背景深色化（变暗） */
+}
+
+/* 核心：点击容器内部任意位置时，背景进一步变暗（增强反馈） */
+.forum-container:active, .novel-container:active {
+  background: rgba(0, 0, 0, 0.4); /* 点击时背景更深 */
+  
+
+
+/* 标题样式 - 确保在容器正上方 */
+.container-title {
+  text-align: center; /* 标题居中 */
+  margin: 0px 0 !important; /* 标题上下留间距 */
+ }
+ 
+ /* 容器及下方内容的共同父级 - 关键：限制宽度与容器一致 */
+  .container-group {
+    width: 100%;
+    max-width: 1200px; /* 与容器父级宽度一致 */
+    margin: 0 auto; /* 居中对齐 */
+  }
+  
+  /* 容器下方内容样式 - 与容器同宽对齐 */
+  .below-containers {
+    width: 100%; /* 与父级同宽，即与容器宽度一致 */
+    margin-top: 30px; /* 与容器保持间距 */
+    text-align: center; /* 内容居中 */
+  }
+  
+  
+  #top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* 给回到顶部链接添加样式 */
+a[onclick*="scrollTo"] {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #00ffff;
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 4px;
+  text-decoration: none !important;
+}
+a[onclick*="scrollTo"]:hover {
+  background: #00cccc; /* hover效果增强交互感 */
+}
+
+.image-container img {
+  max-width: 100% !important; /* 图片最大宽度不超过容器 */
+  height: auto !important; /* 保持图片比例 */
+  display: inline-block; /* 避免图片独占一行导致溢出 */
+}
+}
+
+/* 回到顶部按钮 */
+#backToTop {
+  position: fixed;
+  right: 30px;
+  bottom: 53px;
+  width: 38px;
+  height: 38px;
+  background-color: rgba(0, 255, 255, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* 强制显示，不受设备类型限制 */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+#backToTop span {
+  color: #000;
+  font-size: 15px;
+  font-weight: bold;
+  transform: rotate(315deg);
+  display: inline-block;
+  margin-top: 4px; /* 顶部留4px空隙，箭头视觉上更靠上 */
+}
+}
