@@ -202,53 +202,55 @@
           // 内容加载完成后显示查找按钮
           document.getElementById('toggleSearchBtn').style.display = 'block';
 
-// ==================== 长按3秒解锁只显示查找按钮 ====================
-(function() {
-  const toggleBtn = document.getElementById('toggleSearchBtn');
-  const searchContainer = document.getElementById('searchContainer');
-  const searchInput = document.getElementById('searchInput');
-  const content = document.getElementById('content');
-  const contentContainer = document.getElementById('contentContainer');
+// ==================== 长按3秒解锁====================
+(function(){
+    const btn = document.getElementById('toggleSearchBtn');
+    const contentWrap = document.getElementById('contentContainer');
+    const searchBox = document.getElementById('searchContainer');
+    const input = document.getElementById('searchInput');
+    const page = document.getElementById('pagination');
 
-  let unlockTimer = null;
-  let unlocked = false;
+    let timer = null;
+    let unlocked = false;
 
-  // 初始：只显示查找按钮，其他全部隐藏+禁用
-  content.style.display = 'none';
-  contentContainer.style.display = 'none';
-  searchContainer.style.display = 'none';
-  searchInput.disabled = true;
-  searchInput.style.pointerEvents = 'none';
+    // 初始只显示按钮
+    contentWrap.style.display = 'none';
+    searchBox.style.display = 'none';
+    if(page) page.style.display = 'none';
 
-  // 长按 3 秒解锁
-  toggleBtn.addEventListener('touchstart', function() {
-    unlockTimer = setTimeout(() => {
-      unlocked = true;
-      content.style.display = 'block';
-      contentContainer.style.display = 'block';
-      searchContainer.style.display = 'block';
-      searchInput.disabled = false;
-      searchInput.style.pointerEvents = 'auto';
-    }, 3000);
-  });
+    // 禁止系统菜单
+    btn.addEventListener('contextmenu',e=>e.preventDefault());
+    btn.style.webkitTouchCallout = 'none';
+    btn.style.userSelect = 'none';
 
-  // 松开/取消就清零
-  toggleBtn.addEventListener('touchend', () => clearTimeout(unlockTimer));
-  toggleBtn.addEventListener('touchcancel', () => clearTimeout(unlockTimer));
-  toggleBtn.addEventListener('touchmove', () => clearTimeout(unlockTimer));
+    // 长按开始
+    btn.addEventListener('touchstart',function(e){
+        if(unlocked) return;
+        e.preventDefault();
+        timer = setTimeout(()=>{
+            unlocked = true;
+            // 解锁显示
+            contentWrap.style.display = '';
+            searchBox.style.display = '';
+            if(page) page.style.display = '';
+        },3000);
+    },{passive:false});
 
-  // 未解锁禁止任何操作
-  toggleBtn.addEventListener('click', function(e) {
-    if (!unlocked) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  });
-  searchInput.addEventListener('focus', function(e) {
-    if (!unlocked) e.target.blur();
-  });
+    // 松开取消
+    const clear = ()=>clearTimeout(timer);
+    btn.addEventListener('touchend',clear);
+    btn.addEventListener('touchcancel',clear);
+    btn.addEventListener('touchmove',clear);
+
+    // 未解锁禁止点击触发搜索框
+    btn.addEventListener('click',function(e){
+        if(!unlocked){
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+    },true);
 })();
-// ==================== 解锁结束 ====================
+// ==================== 结束 ====================
           
           // 所有内容加载完成，隐藏加载层并显示页面
           setTimeout(() => {
