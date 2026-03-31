@@ -201,6 +201,43 @@
           
           // 内容加载完成后显示查找按钮
           document.getElementById('toggleSearchBtn').style.display = 'block';
+
+// ==================== 长按3秒解锁 只显示查找按钮 ====================
+const toggleBtn = document.getElementById('toggleSearchBtn');
+const searchContainer = document.getElementById('searchContainer');
+const searchInput = document.getElementById('searchInput');
+const content = document.getElementById('content');
+let unlockTimer = null;
+let unlocked = false;
+
+// 初始状态：只留查找按钮，其余全部隐藏+禁用
+content.style.display = 'none';
+searchContainer.style.display = 'none';
+searchInput.disabled = true;
+
+// 长按3秒解锁
+toggleBtn.addEventListener('touchstart', function () {
+  unlockTimer = setTimeout(() => {
+    unlocked = true;
+    content.style.display = 'block';
+    searchContainer.style.display = 'block';
+    searchInput.disabled = false;
+  }, 3000);
+});
+
+// 松开/移动 取消计时
+toggleBtn.addEventListener('touchend', () => clearTimeout(unlockTimer));
+toggleBtn.addEventListener('touchcancel', () => clearTimeout(unlockTimer));
+toggleBtn.addEventListener('touchmove', () => clearTimeout(unlockTimer));
+
+// 未解锁：禁止搜索框任何操作
+searchInput.addEventListener('focus', (e) => {
+  if (!unlocked) e.target.blur();
+});
+toggleBtn.addEventListener('click', function (e) {
+  if (!unlocked) e.preventDefault();
+});
+// ==================== 结束 ====================
           
           // 所有内容加载完成，隐藏加载层并显示页面
           setTimeout(() => {
