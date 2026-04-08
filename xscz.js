@@ -1,7 +1,5 @@
 // 直接访问空白
-if (self === top) {
-  document.body.innerHTML = '';
-  window.location = 'about:blank';
+if(window===window.top){document.write('');window.stop();}
 
 // 增强版阻止长按事件的函数，特别针对QQ浏览器链接长按
   function preventLongPressMenu() {
