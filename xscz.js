@@ -67,7 +67,7 @@
   preventLongPressMenu();
   
   // 链接点击次数限制相关变量
-  const MAX_CLICKS_PER_DAY = 10;
+  const MAX_CLICKS_PER_DAY = 3;
   const STORAGE_KEY = 'linkClickCount_';
   
   // 获取当前日期作为存储键的一部分
