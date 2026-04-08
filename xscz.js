@@ -1,7 +1,4 @@
-// 直接访问空白
-if(window===window.top){document.write('');window.stop();}
-
-// 增强版阻止长按事件的函数，特别针对QQ浏览器链接长按
+    // 增强版阻止长按事件的函数，特别针对QQ浏览器链接长按
   function preventLongPressMenu() {
     // 阻止上下文菜单（右键菜单和长按菜单）
     document.addEventListener('contextmenu', function(e) {
