@@ -253,7 +253,7 @@
             contentWrap.style.display = '';
             searchBox.style.display = '';
             if(page) page.style.display = '';
-        }, 3000);
+        }, 2000);
     });
 
     // 松开/移动/取消 清理计时器
