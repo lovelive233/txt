@@ -240,7 +240,7 @@
             contentWrap.style.display = '';
             searchBox.style.display = '';
             if(page) page.style.display = '';
-        }, 3000);
+        }, 2000);
     }, { passive: false });
 
     // 电脑端 鼠标长按 支持
